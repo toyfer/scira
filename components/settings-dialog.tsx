@@ -1354,19 +1354,17 @@ function MemoriesSection() {
                 className="group relative p-3 rounded-lg border bg-card/50 hover:bg-card transition-all"
               >
                 <div className="pr-8">
-                  {memory.title && (
-                    <h4 className="text-sm font-medium mb-1 text-foreground">{memory.title}</h4>
-                  )}
-                  <p className="text-sm leading-relaxed text-muted-foreground">{memory.content || getMemoryContent(memory)}</p>
+                  {memory.title && <h4 className="text-sm font-medium mb-1 text-foreground">{memory.title}</h4>}
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {memory.content || getMemoryContent(memory)}
+                  </p>
                   <div className="flex items-center gap-3 text-[10px] text-muted-foreground mt-2">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       <span>{formatDate(memory.createdAt || memory.created_at || '')}</span>
                     </div>
                     {memory.type && (
-                      <div className="px-1.5 py-0.5 bg-muted/50 rounded text-[9px] font-medium">
-                        {memory.type}
-                      </div>
+                      <div className="px-1.5 py-0.5 bg-muted/50 rounded text-[9px] font-medium">{memory.type}</div>
                     )}
                     {memory.status && memory.status !== 'done' && (
                       <div className="px-1.5 py-0.5 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded text-[9px] font-medium">
@@ -1420,15 +1418,9 @@ function MemoriesSection() {
         )}
       </div>
       <div className="flex items-center gap-2 justify-center">
-          <p className="text-xs text-muted-foreground">powered by</p>
-          <Image
-            src="/supermemory.svg"
-            alt="Memories"
-            className='invert dark:invert-0'
-            width={140}
-            height={140}
-          />
-        </div>
+        <p className="text-xs text-muted-foreground">powered by</p>
+        <Image src="/supermemory.svg" alt="Memories" className="invert dark:invert-0" width={140} height={140} />
+      </div>
     </div>
   );
 }

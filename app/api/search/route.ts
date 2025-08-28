@@ -64,7 +64,12 @@ import { GroqProviderOptions } from '@ai-sdk/groq';
 import { GoogleGenerativeAIProviderOptions } from '@ai-sdk/google';
 import { markdownJoinerTransform } from '@/lib/parser';
 import { ChatMessage } from '@/lib/types';
-import { createMemoryTools, type SearchMemoryTool, type AddMemoryTool, type FetchMemoryTool } from '@/lib/tools/supermemory';
+import {
+  createMemoryTools,
+  type SearchMemoryTool,
+  type AddMemoryTool,
+  type FetchMemoryTool,
+} from '@/lib/tools/supermemory';
 
 let globalStreamContext: ResumableStreamContext | null = null;
 
@@ -380,7 +385,7 @@ export async function POST(req: Request) {
                 }
               : model.includes('deepseek-v3')
                 ? {
-                    reasoning_effort: "none"
+                    reasoning_effort: 'none',
                   }
                 : {}),
           },
@@ -441,14 +446,16 @@ export async function POST(req: Request) {
           mcp_search: mcpSearchTool,
           extreme_search: extremeSearchTool(dataStream),
           greeting: greetingTool(timezone),
-          ...(user ? (() => {
-            const memoryTools = createMemoryTools(user.id);
-            return {
-              search_memories: memoryTools.searchMemories as SearchMemoryTool,
-              add_memory: memoryTools.addMemory as AddMemoryTool,
-              fetch_memory: memoryTools.fetchMemory as FetchMemoryTool,
-            };
-          })() : {}),
+          ...(user
+            ? (() => {
+                const memoryTools = createMemoryTools(user.id);
+                return {
+                  search_memories: memoryTools.searchMemories as SearchMemoryTool,
+                  add_memory: memoryTools.addMemory as AddMemoryTool,
+                  fetch_memory: memoryTools.fetchMemory as FetchMemoryTool,
+                };
+              })()
+            : {}),
         },
         experimental_repairToolCall: async ({ toolCall, tools, inputSchema, error }) => {
           if (NoSuchToolError.isInstance(error)) {
@@ -462,7 +469,7 @@ export async function POST(req: Request) {
           console.log('error', error);
 
           const tool = tools[toolCall.toolName as keyof typeof tools];
-          
+
           if (!tool) {
             return null;
           }

@@ -67,7 +67,7 @@ export class FirecrawlClient {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
         query: options.query,
@@ -77,8 +77,8 @@ export class FirecrawlClient {
         tbs: options.tbs,
         scrapeOptions: {
           formats: ['markdown'],
-          proxy: "auto",
-          blockAds: true
+          proxy: 'auto',
+          blockAds: true,
         },
       }),
     });
@@ -96,7 +96,7 @@ export class FirecrawlClient {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
         query: options.query,
