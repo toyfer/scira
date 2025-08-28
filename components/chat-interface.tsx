@@ -448,11 +448,24 @@ const ChatInterface = memo(
       return -1;
     }, [messages]);
 
+    // Throttled scroll to reduce conflicts with Messages component during streaming
+    const scrollThrottleRef = useRef<NodeJS.Timeout | null>(null);
+    
+    const throttledScrollToElement = useCallback(() => {
+      if (scrollThrottleRef.current) {
+        clearTimeout(scrollThrottleRef.current);
+      }
+      
+      scrollThrottleRef.current = setTimeout(() => {
+        scrollToElement();
+      }, status === 'streaming' ? 200 : 0); // Throttle during streaming to avoid conflicts
+    }, [scrollToElement, status]);
+
     useEffect(() => {
       // Reset manual scroll when streaming starts
       if (status === 'streaming') {
         resetManualScroll();
-        // Initial scroll to bottom when streaming starts
+        // Initial scroll to bottom when streaming starts (immediate)
         scrollToElement();
       }
     }, [status, resetManualScroll, scrollToElement]);
@@ -460,13 +473,14 @@ const ChatInterface = memo(
     // Auto-scroll on new content if user is at bottom or hasn't manually scrolled away
     useEffect(() => {
       if (status === 'streaming' && (isAtBottom || !hasManuallyScrolled)) {
-        scrollToElement();
+        // Use throttled scroll during streaming to reduce conflicts
+        throttledScrollToElement();
       } else if (
         messages.length > 0 &&
         chatState.suggestedQuestions.length > 0 &&
         (isAtBottom || !hasManuallyScrolled)
       ) {
-        // Scroll when suggested questions appear
+        // Immediate scroll when suggested questions appear (not streaming)
         scrollToElement();
       }
     }, [
@@ -476,7 +490,17 @@ const ChatInterface = memo(
       isAtBottom,
       hasManuallyScrolled,
       scrollToElement,
+      throttledScrollToElement,
     ]);
+
+    // Cleanup throttle timeout on unmount
+    useEffect(() => {
+      return () => {
+        if (scrollThrottleRef.current) {
+          clearTimeout(scrollThrottleRef.current);
+        }
+      };
+    }, []);
 
     // Dialog management state - track command dialog state in chat state
     useEffect(() => {
