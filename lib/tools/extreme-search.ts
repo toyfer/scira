@@ -168,7 +168,7 @@ const getContents = async (links: string[]) => {
             title: scrapeResponse.metadata?.title || url.split('/').pop() || 'Retrieved Content',
             url: url,
             content: scrapeResponse.markdown.slice(0, 3000), // Match maxCharacters from Exa
-            publishedDate: scrapeResponse.metadata?.publishedDate as string || '',
+            publishedDate: (scrapeResponse.metadata?.publishedDate as string) || '',
             favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`,
           });
         } else {

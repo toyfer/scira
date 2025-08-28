@@ -65,7 +65,7 @@ export class ParallelAI {
       include_domains?: string[];
       exclude_domains?: string[];
       topic?: 'general' | 'news' | 'finance';
-    } = {}
+    } = {},
   ): Promise<ParallelSearchResponse & { query: string }> {
     const searchOptions: ParallelSearchOptions = {
       objective: query,
@@ -101,7 +101,7 @@ export class ParallelAI {
       include_domains?: string[];
       exclude_domains?: string[];
       objective?: string;
-    } = {}
+    } = {},
   ): Promise<ParallelBatchSearchResponse> {
     const searchOptions: ParallelSearchOptions = {
       objective: options.objective || queries.at(0) || '',
@@ -147,7 +147,7 @@ export class ParallelAI {
       query_results: queries.map((query, index) => ({
         query,
         results: result.results || [], // All results are returned together, we'll distribute them
-      }))
+      })),
     };
   }
 }
